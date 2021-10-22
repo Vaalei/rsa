@@ -6,8 +6,6 @@ from webbrowser import open_new
 
 
 
-
-
 # Generate RSA keys
 def genRSA(bits):
     p, q = getCryptoPrimes(bits)
@@ -21,7 +19,7 @@ def rgb(rgb):
 
 def changeEncrypt():
     value = encryptInputField.get("1.0", END)
-    if value == "": return
+    if value == None: return
     if chosenType.get() == "Integer":
         try:
             value = int(value)
@@ -40,7 +38,7 @@ def changeEncrypt():
 
 def changeDecrypt():
     value = decryptInputField.get("1.0", END)
-    if value == "": return
+    if value == None: return
     try:
         value = int(value)
     except:
@@ -57,8 +55,20 @@ def changeDecrypt():
     decryptOutputField.delete("1.0","end")
     decryptOutputField.insert("1.0", output)
 
+def toggleAdvanced():
+    if advanced == False:  
+        for i in advancedWidgets:
+            i[0].grid(column=i[1][0], row=i[1][1])
+        advanced = True
+    else:
+        for i in advancedWidgets:
+            i[0].grid_forget()
+        
+    
+    
 
-BGCOLOUR = rgb((18,18,18))
+
+BGCOLOUR = "#010409"
 
 
 root = Tk()
@@ -67,45 +77,53 @@ root.title("RSA Kryptering @Vaalei")
 root.configure(
     background=BGCOLOUR
 )
-
-frm = ttk.Frame(root, padding=20)
-frm.grid()
-
+root.iconbitmap("./pictures/main.ico")
 
 style = ttk.Style()
+style.theme_use('alt')
 style.configure("BW.TLabel", 
     foreground="white", 
     background=BGCOLOUR,
     font= "helvetica 10 bold"
-    )
+)
 
 style.configure(
     "BW.TButton",
     borderwidth=5,
-    border="white"
+    border=rgb((20,20,20)),
+    background=BGCOLOUR,
+    foreground="white",
+    font="helvetica 10 bold"
 )
+style.map('TButton', background=[('active', BGCOLOUR)])
 
+style.configure(
+    "Github.TLabel",
+    foreground="blue",
+    font="Helvetica 11",
+    background=BGCOLOUR
+)
 
 
 # ENCRYPTION
 # Input
-encryptTitle = ttk.Label(root, style="BW.TLabel", text="Encrypt", font="Helvetica 18 bold", padding=0)
+encryptTitle = ttk.Label(root, style="BW.TLabel", text="Encryptor", font="Helvetica 18 bold", padding=0)
 encryptTitle.grid(column=1, row=0)
 
 encryptInputText = ttk.Label(root, style="BW.TLabel", text="Input:", padding=0)
 encryptInputText.grid(column=0, row=1)
-encryptInputVar = StringVar()
-encryptInputField = Text(root, width=30, height=10)
+
+encryptInputField = Text(root, width=30, height=10, font=("Helvetica", 10))
 encryptInputField.grid(column=1, row=1)
 
 # Output
 encryptOutputText = ttk.Label(root, style="BW.TLabel", text="Encrypted:", padding=0)
 encryptOutputText.grid(column=0, row=2)
-encryptOutputVar = StringVar()
-encryptOutputField = Text(root, width=30, height=10)
+
+encryptOutputField = Text(root, width=30, height=10, font=("Helvetica", 10))
 encryptOutputField.grid(column=1, row=2)
 
-calculateButton = ttk.Button(root, style="BW.TLabel", text="Calculate", padding=0, command=lambda: changeEncrypt(), cursor="hand2")
+calculateButton = ttk.Button(root, style="BW.TButton", text="Calculate", padding=5, command=lambda: changeEncrypt(), cursor="hand2")
 calculateButton.grid(column=1, row=3)
 
 # END OF ENCRYPTION
@@ -115,53 +133,67 @@ calculateButton.grid(column=1, row=3)
 
 # DECRYPTION
 # Input
-decryptTitle = ttk.Label(root, style="BW.TLabel", text="Decrypt", font="Helvetica 18 bold", padding=0)
+decryptTitle = ttk.Label(root, style="BW.TLabel", text="Decryptor", font="Helvetica 18 bold", padding=0)
 decryptTitle.grid(column=4, row=0)
 decryptInputText = ttk.Label(root, style="BW.TLabel", text="Input:", padding=0)
 decryptInputText.grid(column=3, row=1)
-decryptInputVar = StringVar()
-decryptInputField = Text(root, width=30, height=10)
+
+decryptInputField = Text(root, width=30, height=10, font=("Helvetica", 10))
 decryptInputField.grid(column=4, row=1)
 
 # Output
 decryptOutputText = ttk.Label(root, style="BW.TLabel", text="Encrypted:", padding=40)
 decryptOutputText.grid(column=3, row=2)
-decryptOutputVar = StringVar()
-decryptOutputField = Text(root, width=30, height=10)
+
+decryptOutputField = Text(root, width=30, height=10, font=("Helvetica", 10))
 decryptOutputField.grid(column=4, row=2)
 
 
-calculateButton = ttk.Button(root, style="BW.TLabel", text="Calculate", padding=0, command=lambda: changeDecrypt(), cursor="hand2")
+
+calculateButton = ttk.Button(root, style="BW.TButton", text="Calculate", padding=5, command=lambda: changeDecrypt(), cursor="hand2")
 calculateButton.grid(column=4, row=3)
 
 # END OF DECRYPTION
 
 
-# Options
-ttk.Label(root, style="BW.TLabel", text="Type of encryption:", font="Halvetica 10 bold").grid(column=0, row=6)
+# OPTIONS
+#ttk.Label(root, style="BW.TLabel", text="Type of encryption:", font="Halvetica 10 bold").grid(column=0, row=6)
 chosenType = StringVar()
 chosenType.set("Integer")
 chooseType = ttk.OptionMenu(root, chosenType, "Choose Encryption Type Here", "Integer", "Text")
-chooseType.grid(column=1, row=6)
+chooseType.grid(column=1, row=5)
 chooseType.configure(
     width=30,
-    cursor="hand2"
+    cursor="hand2", 
+    style="BW.TButton"
 )
+
+# Advanced
+# Show prime numbers, N, E 
+showAdvancedButton = ttk.Button(root, style="BW.TButton", text="Toggle advanced", command=lambda: toggleAdvanced())
+showAdvancedButton.grid(column=4, row=5)
 
 
 # PADDING
-#ttk.Label(root, style="BW.TLabel", text="", padding=0).grid(column=2,row=99) # Between different convertors
-ttk.Label(root, style="BW.TLabel", text="").grid(column=0, row=4) # Between 
-ttk.Label(root, style="BW.TLabel", text="").grid(column=0, row=98) # Before Github link
-ttk.Label(root, style="BW.TLabel", text="     ").grid(column=99,row=100)
+ttk.Label(root, style="BW.TLabel", text="").grid(column=0, row=4)           # Between converters and below
+ttk.Label(root, style="BW.TLabel", text="").grid(column=0, row=98)          # Before Github link
+ttk.Label(root, style="BW.TLabel", text="     ").grid(column=99,row=100)    # Make a margin bottom right
+
 
 
 # Github
-github = Label(root, text="Github.com @Vaalei", fg="blue", cursor="hand2", font="Helvetica 11", bg=BGCOLOUR)
+github = ttk.Label(root, style="Github.TLabel", text="Github @Vaalei", cursor="hand2", padding= 10)
 github.grid(column=0,row=99)
 github.bind("<Button-1>", lambda e: open_new("https://github.com/Vaalei"))
 
 
 if __name__ == "__main__":
-    pk, sk, mod = genRSA(256)
+    advanced = False
+    pk, sk, mod = genRSA(512)
     root.mainloop()
+
+
+
+
+
+
