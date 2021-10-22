@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import scrolledtext as st
 from rsaModules import getCryptoPrimes, getKeys, encrypt, decrypt, removeLetters, int2Text, text2Int, modSize
-from webbrowser import BackgroundBrowser, open_new
+from webbrowser import open_new
 
 
 

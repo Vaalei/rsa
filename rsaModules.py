@@ -60,9 +60,9 @@ def removeLetters(string):
 
 
 def inv(p, q):
-    """Multiplicative inverse"""
+    # Multiplicative inverse
     def xgcd(x, y):
-        """Extended Euclidean Algorithm"""
+        # Extended Euclidean Algorithm
         s1, s0 = 0, 1
         t1, t0 = 1, 0
         while y:
@@ -78,9 +78,9 @@ def inv(p, q):
         t += q
     return t
 
+
 # credit : http://jhafranco.com/2012/01/29/rsa-implementation-in-python/ 
 # for both text2Int & int2Text
- 
 def text2Int(text):
     """Convert a text string into an integer"""
     return reduce(lambda x, y : (x << 8) + y, map(ord, text))
